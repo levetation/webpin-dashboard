@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 
 from . import views
+from users import views as user_views
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -27,5 +28,11 @@ urlpatterns = [
     path('cards', views.cards, name='cards'),
     path('forms', views.forms, name='forms'),
     path('typography', views.typography, name='typography'),
+
+    # auth
+    path('register_user', user_views.register_user, name='register_user'),
+    path('logout_user', user_views.logout_user, name='logout_user'),
+    path('login_user', user_views.login_user, name='login_user'),
+    path('account', user_views.account, name='account'),
 
 ]

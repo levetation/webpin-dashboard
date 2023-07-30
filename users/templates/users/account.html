@@ -1,0 +1,7 @@
+{% extends 'dashboardhome/template.html' %}
+{% block content %}
+{% load static %}
+
+<h1>{% if user.is_authenticated %}{{user.email}}{% endif %}</h1>
+
+{% endblock %}
