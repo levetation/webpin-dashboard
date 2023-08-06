@@ -11,7 +11,7 @@ from .models import Bookmark
 @login_required(login_url="/login_user")
 def bookmark_gallery(request):
     context = {}
-    bookmarks = Bookmark.objects.filter(author=request.user.id).order_by('save_date')
+    bookmarks = Bookmark.objects.filter(author=request.user.id).order_by('-save_date')
     context['bookmarks'] = bookmarks
 
     # New bookmark
@@ -69,7 +69,7 @@ def bookmark_gallery(request):
     # Sort by
     if request.method == 'POST' and 'sort' in request.POST:
         if request.POST['sort'] == 'Oldest':
-            bookmarks = Bookmark.objects.filter(author=request.user.id).order_by('-save_date')
+            bookmarks = Bookmark.objects.filter(author=request.user.id).order_by('save_date')
         else:
             return redirect('bookmark_gallery')
         context = {'bookmarks': bookmarks, 'sortby': request.POST['sort']}
