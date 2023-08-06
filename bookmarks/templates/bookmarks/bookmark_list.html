@@ -1,0 +1,65 @@
+{% extends 'dashboardhome/template.html' %}
+
+{% block content %}
+{% load static %}
+
+<!-- Toolbar -->
+<div class="card mb-lg-3">
+  <div class="card-body p-4 ">
+    <a href="#" class="btn btn-primary">placeholder</a>
+  </div>
+</div>
+
+<!-- sort by & layout -->
+<div class="row">
+  <div class="container-fluid d-flex justify-content-end align-items-center">
+   
+    <form method=POST>
+      {% csrf_token %}
+      <div class="dropdown">
+        <button class="btn btn-outline-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Sort By
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><input class="dropdown-item" type="submit" value="Newest"  name="sort"></li>
+          <li><input class="dropdown-item" type="submit" value="Oldest" name="sort"></li>
+        </ul>
+      </div>
+    </form>
+
+    <span class="align-middle">{% if sortby %} Sorted by: Oldest {% else %} Sorted by: Newest {% endif %}</span>
+    <a href="{% url 'bookmark_gallery' %}" class="card-title m-1"><i class="ti ti-table fs-8"></i></a>
+    <!-- <a href="{% url 'bookmark_list' %}" class="card-title m-1"><i class="ti ti-list fs-8"></i></a> -->
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 overflow-auto">
+    
+    
+      
+      {% if bookmarks %}{% for bookmark in bookmarks %}
+        <div class="row">  
+          <div class="col-md-12"> <!-- start card -->
+            <a href="{{bookmark.address}}" class="card-link" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: black;">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title align-middle">{{bookmark.title}}</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">{{bookmark.save_date|date:"d.m.Y"}}</h6>
+                  {% if bookmark.notes %}
+                    <p class="card-text overflow-hidden" style="height: 25px; ">{{bookmark.notes}}</p>
+                  {% endif %}
+                  <img class="img-thumbnail" height="100%" width="30px" src="/get_favicon?url={{bookmark.address}}" onerror=" this.style.display='none' " alt=" ">
+                  <a href="#edit" class="card-link">Edit</a>
+                </div>
+              </div>
+            </a>
+          </div> <!-- end card -->
+        </div>
+      {% endfor %}{% endif %}
+    
+     
+
+  </div> <!-- end of scroll column -->
+
+{% endblock %}

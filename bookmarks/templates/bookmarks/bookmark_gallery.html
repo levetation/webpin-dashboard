@@ -1,0 +1,222 @@
+{% extends 'dashboardhome/template.html' %}
+
+{% block content %}
+{% load static %}
+
+<!-- Toolbar -->
+<div class="card mb-lg-3">
+  <div class="card-body p-4 ">
+    <div class="row d-flex justify-content-center">
+      
+      <!-- NEW bookmark -->
+      <div class="col-lg-auto col-md-auto col-sm-12"> <!-- start new Bookmark-->
+        <div class="row mx-1">
+          <a type="button" data-bs-toggle="modal" data-bs-target="#AddBookmarkModal" class="btn btn-primary">New Bookmark</a>    
+          <form method=POST>
+            {% csrf_token %}
+              <div class="modal fade" id="AddBookmarkModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add new bookmark.</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      
+                      <!-- inputs -->
+                      <label class="form-label">Title</label>
+                      <input type="text" name="new_bookmark_title" class="form-control mb-2" placeholder="Bookmark title">
+                      <label class="form-label">URL</label>
+                      <input type="text" name="new_bookmark_address" class="form-control mb-2" placeholder="URL link *" required>      
+                      <label class="form-label">Notes</label>
+                      <textarea name="new_bookmark_notes" rows="4" cols="28" class="form-control mb-2" placeholder="Description"></textarea>
+
+                      <!-- Catagorise bookmarks -->
+                      <label class="form-label">category</label>
+                      <input name="new_bookmark_category" class="form-control mb-2" list="datalistOptions" placeholder="Type category or choose from existing">
+                      <datalist id="datalistOptions">
+                          {% if user.is_authenticated %}
+                              {% for category in catagories %}
+                                  <option value="{{category}}"></option>
+                              {% endfor %}
+                          {% endif %}
+                      </datalist>
+                      <div class="row text-center d-flex justify-content-center">
+                        <div class="col-auto">
+                          <input class="btn btn-success text-center" type="submit" name="submit_new_bookmark" value="Submit">
+                          <button type="button" class="btn btn-outline-link" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </form>
+        </div>
+      </div> <!-- end new bookmark -->
+
+      <!-- Quick add -->
+      <div class="col-lg-auto col-md-auto col-sm-12"><!-- Start Quick Add -->
+        <form method=POST> 
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-auto input-group">
+              <input class="form-control" type="text" name="quickaddurl" placeholder="Quick add">
+              <input class="btn btn-success" type="submit" value="Add">
+            </div>
+          </div>
+        </form> 
+      </div><!-- End Quick Add-->
+
+      <!-- Filter catagories -->
+      <div class="col-lg-3 col-md-auto col-sm-12">
+          <form method=POST> <!-- form start -->
+            {% csrf_token %}
+            <div class="input-group">
+              <select class="form-select" name="selected_bookmark_category">
+                <option selected>View all</option>
+                  {% for category in catagories %}
+                    <option value="{{category}}">{{category}}</option>
+                  {% endfor %}
+              </select>
+              <input class="btn btn-light" type="submit" name="select_category" value="View">
+            </div>
+          </form> <!-- form end -->
+        
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- sort by & layout toolbar -->
+<div class="row mb-1">
+  <div class="container-fluid d-flex justify-content-end align-items-center">
+    <span class="align-middle me-1">{% if sortby %} Sorted by: Oldest {% else %} Sorted by: Newest {% endif %}</span>
+    <form method=POST>
+      {% csrf_token %}
+      <div class="dropdown">
+        <button class="btn btn-outline-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Sort by
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><input class="dropdown-item" type="submit" value="Newest"  name="sort"></li>
+          <li><input class="dropdown-item" type="submit" value="Oldest" name="sort"></li>
+        </ul>
+      </div>
+    </form>
+    <!-- future feature: switch between gallery view and list view <i class="ti ti-list fs-8"></i> -->
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 overflow-auto">
+    
+    <div class="row">
+      
+      {% if bookmarks %}{% for bookmark in bookmarks %}
+
+      <div class="col-md-4"> <!-- start card -->
+          <div class="card border">
+            <div class="card-body">
+              <div class="row mb-1">
+                <div class="col-auto overflow-hidden" style="height: 50px;">
+                  <img class="img-thumbnail me-3" height="100%" width="35px" src="/get_favicon?url={{bookmark.address}}" onerror=" this.style.display='none' " alt=" ">
+                  <span>
+                    <a href="{{bookmark.address}}" class="card-title fs-7 " target="_blank" rel="noopener noreferrer" >
+                      {{bookmark.title}}
+                    </a>
+                  </span>                    
+                </div>
+              </div>
+              {% if bookmark.notes == None %}
+                <p class="card-text overflow-hidden" style="height: 25px; ">...</p>
+              {% else %}
+                <p class="card-text overflow-hidden" style="height: 25px; ">{{bookmark.notes}}</p>
+              {% endif %}
+              <h6 class="card-subtitle text-muted me-1 mb-3">{{bookmark.save_date|date:"d.m.Y"}}</h6>
+              <div class="row">
+                <div class="col-auto">
+                  
+                  <!-- edit button -->
+                  <a type="button" data-bs-toggle="modal" data-bs-target="#EditBookmarkModal{{ bookmark.id }}" class="card-title"><i class="ti ti-edit fs-7 me-2"></i></a>
+                  <!-- edit bookmark -->
+                  <div class="modal fade" id="EditBookmarkModal{{ bookmark.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit bookmark</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <form method=POST>
+                          {% csrf_token %}
+                            
+                            <!-- inputs -->
+                            <label class="form-label">Title</label>
+                            <input type="text" name="new_bookmark_title" class="form-control mb-2" placeholder="Bookmark title" value="{{bookmark.title}}">
+                            <label class="form-label">URL</label>
+                            <input type="text" name="new_bookmark_address" class="form-control mb-2" placeholder="URL link *" required value="{{bookmark.address}}">      
+                            <label class="form-label">Notes</label>
+                            <textarea name="new_bookmark_notes" rows="4" cols="28" class="form-control mb-2" placeholder="Description">{{bookmark.notes}}</textarea>
+
+                            <!-- Catagorise bookmarks -->
+                            <label class="form-label">category</label>
+                            <input name="new_bookmark_category" class="form-control mb-2" list="datalistOptions" placeholder="Type category or choose from existing" value="{{bookmark.category}}">
+                            <datalist id="datalistOptions">
+                                {% if user.is_authenticated %}
+                                    {% for category in catagories %}
+                                        <option value="{{category}}"></option>
+                                    {% endfor %}
+                                {% endif %}
+                            </datalist>
+                            
+                            <!-- bookmark id -->
+                            <input type="hidden" name="bookmark_id" value="{{ bookmark.id }}" class="form-control">
+                              <div class="row text-center d-flex justify-content-center">
+                                <div class="col-auto">
+                                  <input class="btn btn-secondary" type="submit" name="edit_selected_bookmark" value="Update">
+                                  <button type="button" class="btn btn-outline-link" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                              </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div> <!-- end edit bookmark -->
+                   
+
+
+                  <!-- delete button -->
+                  <a type="button" data-bs-toggle="modal" data-bs-target="#DeleteBookmarkModal{{ bookmark.id }}" class="card-title"><i class="ti ti-trash fs-7"></i></a>
+                  <form method=POST> <!-- delete bookmark -->
+                    {% csrf_token %}
+                      <div class="modal fade" id="DeleteBookmarkModal{{ bookmark.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete this bookmark?</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                              <a href="{% url 'delete_bookmark' bookmark.id %}" class="btn btn-danger" name="delete_selected_bookmark" value="Delete">Delete</a>
+                              <button type="button" class="btn btn-outline-link" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </form> <!-- end delete -->
+                </div>
+              </div>
+            </div>
+          </div>
+        
+      </div> <!-- end card -->
+
+      {% endfor %}{% endif %}
+    
+    </div> 
+
+  </div> <!-- end of scroll column -->
+
+{% endblock %}

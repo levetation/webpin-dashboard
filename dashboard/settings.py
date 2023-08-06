@@ -30,6 +30,13 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = "users.CustomUser" # https://testdriven.io/blog/django-custom-user-model/
 
+# Caching
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "unique-snowflake",
+    }
+}
 
 # Application definition
 
@@ -41,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dashboardhome',
+    'bookmarks',
     'users',
 ]
 

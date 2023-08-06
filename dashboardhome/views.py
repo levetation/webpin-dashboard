@@ -1,8 +1,15 @@
 from django.shortcuts import render
 
-# Create your views here.
+## Dev pages
+
 def home(request):
     return render(request, 'dashboardhome/index.html', context={})
+
+def cardlist(request):
+    return render(request, 'dashboardhome/cardlist.html', context={})
+
+
+## Template pages
 
 def sample(request):
     return render(request, 'dashboardhome/sample.html', context={})
@@ -21,3 +28,4 @@ def forms(request):
 
 def typography(request):
     return render(request, 'dashboardhome/ui-typography.html', context={})
+

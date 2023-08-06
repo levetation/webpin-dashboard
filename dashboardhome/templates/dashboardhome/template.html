@@ -13,6 +13,10 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/styles.min.css' %}">
 
+  <!-- markdown editor -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+
 </head>
 
 <body>
@@ -49,6 +53,22 @@
             <li class="nav-small-cap">
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
               <span class="hide-menu">UI COMPONENTS</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'cardlist' %}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-note"></i>
+                </span>
+                <span class="hide-menu">Notes</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'bookmark_gallery' %}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-bookmark"></i>
+                </span>
+                <span class="hide-menu">Bookmarks</span>
+              </a>
             </li>
             <li class="sidebar-item">
               <a class="sidebar-link" href="{% url 'buttons' %}" aria-expanded="false">
@@ -181,7 +201,7 @@
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-              <a href="https://adminmart.com/product/modernize-free-bootstrap-admin-dashboard/" target="_blank" class="btn btn-primary">Download Free</a>
+              <!-- <a href="https://adminmart.com/product/modernize-free-bootstrap-admin-dashboard/" target="_blank" class="btn btn-primary">Download Free</a> -->
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
@@ -230,7 +250,6 @@
           {% endfor %}
         {% endif %}
         {% block content %}{% endblock %}
-        </div>
       </div>
     </div>
   </div>
