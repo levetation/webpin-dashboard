@@ -54,6 +54,16 @@
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
               <span class="hide-menu">UI COMPONENTS</span>
             </li>
+
+            <!-- Main -->
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'boards' %}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-article"></i>
+                </span>
+                <span class="hide-menu">Boards</span>
+              </a>
+            </li>
             <li class="sidebar-item">
               <a class="sidebar-link" href="{% url 'cardlist' %}" aria-expanded="false">
                 <span>
@@ -70,10 +80,12 @@
                 <span class="hide-menu">Bookmarks</span>
               </a>
             </li>
+            <!-- end Main -->
+
             <li class="sidebar-item">
               <a class="sidebar-link" href="{% url 'buttons' %}" aria-expanded="false">
                 <span>
-                  <i class="ti ti-article"></i>
+                  <i class="ti ti-square"></i>
                 </span>
                 <span class="hide-menu">Buttons</span>
               </a>

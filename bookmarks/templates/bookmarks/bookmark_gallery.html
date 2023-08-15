@@ -92,7 +92,6 @@
 <!-- sort by & layout toolbar -->
 <div class="row mb-1">
   <div class="container-fluid d-flex justify-content-end align-items-center">
-    <span class="align-middle me-1">{% if sortby %} Sorted by: Oldest {% else %} Sorted by: Newest {% endif %}</span>
     <form method=POST>
       {% csrf_token %}
       <div class="dropdown">
@@ -105,6 +104,7 @@
         </ul>
       </div>
     </form>
+    <span class="align-middle me-1">{% if sortby %} Oldest {% else %} Newest {% endif %}</span>
     <!-- future feature: switch between gallery view and list view <i class="ti ti-list fs-8"></i> -->
   </div>
 </div>

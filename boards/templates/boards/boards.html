@@ -1,0 +1,98 @@
+{% extends 'dashboardhome/template.html' %}
+
+{% block content %}
+{% load static %}
+
+<h1>Boards</h1>
+
+<!-- Toolbar -->
+<div class="card mb-lg-3">
+  <div class="card-body p-4 ">
+    <div class="row d-flex justify-content-center">
+      
+      <!-- NEW bookmark -->
+      <div class="col-lg-auto col-md-auto col-sm-12"> <!-- start new Bookmark-->
+        <div class="row mx-1">
+          <a type="button" data-bs-toggle="modal" data-bs-target="#AddBoardModal" class="btn btn-primary">New Board</a>    
+          <form method=POST>
+            {% csrf_token %}
+              <div class="modal fade" id="AddBoardModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New board.</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      
+                        <!-- inputs -->
+                        <label class="form-label">Title</label>
+                        <input type="text" name="new_board_title" class="form-control mb-2" placeholder="Board title">    
+                        <label class="form-label">Description</label>
+                        <textarea name="new_board_description" rows="4" cols="28" class="form-control mb-2" placeholder="Description"></textarea>
+                        <label class="form-label">Image</label>
+                        <input type="file" name="new_board_image" class="form-control mb-2" accept="image/png, image/jpeg" />
+                        
+                        <div class="row text-center d-flex justify-content-center">
+                            <div class="col-auto">
+                                <input class="btn btn-success text-center" type="submit" name="submit_new_board" value="Submit">
+                                <button type="button" class="btn btn-outline-link" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </form>
+        </div>
+      </div> <!-- end new bookmark -->
+
+    </div>
+  </div>
+</div>
+
+<!-- sort by & layout toolbar -->
+<div class="row mb-1">
+  <div class="container-fluid d-flex justify-content-end align-items-center">
+    <form method=POST>
+      {% csrf_token %}
+      <div class="dropdown">
+        <button class="btn btn-outline-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Sort by
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><input class="dropdown-item" type="submit" value="Newest"  name="sort"></li>
+          <li><input class="dropdown-item" type="submit" value="Oldest" name="sort"></li>
+        </ul>
+      </div>
+    </form>
+    <span class="align-middle me-1">{% if sortby %} Oldest {% else %} Newest {% endif %}</span>
+    <!-- future feature: switch between gallery view and list view <i class="ti ti-list fs-8"></i> -->
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    
+    <div class="row">
+        {% for board in boards %}
+        <div class="col-sm-6 col-xl-3 ">
+            <div class="card overflow-hidden rounded-2 border">
+              <div class="position-relative">
+                <a href="#"><img src="{{ board.image.url }}" class="card-img-top rounded-0" alt="{{ board.image.url }}"></a>
+                <a href="#" class="btn btn-info d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="view board">View</a></div>
+                <!-- <a href="#" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-click fs-4"></i></a></div> -->
+              <div class="card-body pt-3 p-4">
+                <h6 class="fw-semibold fs-4">{{board.title}}</h6>
+                <div class="d-flex align-items-start justify-content-between overflow-hidden" style="height: 40px;">
+                  <p class="fw-semibold mb-0">{{board.description}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+    </div>
+
+  </div>
+
+{% endblock %}
