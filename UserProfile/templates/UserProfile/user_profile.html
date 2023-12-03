@@ -1,0 +1,103 @@
+{% extends 'dashboardhome/template.html' %}
+
+{% block content %}
+{% load static %}
+
+
+
+    <!-- Edit profile -->
+    <div class="row mb-3 py-3 border-bottom">
+    </div>
+
+
+    <!-- Display profile -->
+    <div class="row mb-5">
+        
+        <div class="col-lg-4 me-3">
+            {% if profile.profile_picture %}
+                <img style="height: 100%; width: 100%" class="rounded overflow-hidden" src="{{profile.profile_picture.url}}" alt="profile">
+            {% else %} 
+                <img style="height: 100%; width: 100%" src="https://images.unsplash.com/photo-1484069560501-87d72b0c3669?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" alt="unknown image"> 
+            {% endif %}
+        </div>
+
+        <div class="col-auto align-bottom">
+            <div class="row">
+                <h1>{% if profile %}{{profile.name}}{% else %} No profile name yet.{% endif %}</h1>
+            </div>
+            <div class="row">
+                <a class="alert alert-warning p-1 px-2 text-center" type="button" data-bs-toggle="modal" data-bs-target="#EditProfile"><i class="ti ti-edit"></i> Edit profile</a>
+            </div>
+            {% if profile.profile_picture %}
+            <div class="row">
+                <form method=POST class="m-0 p-0">
+                    {% csrf_token %}
+                    <input class="alert alert-danger p-1 px-2 text-center" type="submit" data-bs-toggle="modal" name="remove_profile_picture" value="Delete profile picture">
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        
+    </div>
+
+    <div class="row">
+        {% if no_public_boards %} <p> No public boards yet. </p> {% else %} <p>Public Boards</p> {% endif %}
+        {% for board in public_boards %}
+            <div class="col-lg-5">
+                <div class="card overflow-hidden rounded-2 border">
+                    <div class="position-relative">
+                        <!-- Future update: pick image from unsplash -->
+                        {% if board.image %}
+                            <a href="{% url 'board_page' board.id %}"><img class="card-img-top rounded-0" src="{{ board.image.url }}"  alt="{{ board.image.url }}"></a>
+                        {% else %}
+                            <a href="{% url 'board_page' board.id %}"><img class="card-img-top rounded-0" src="https://images.unsplash.com/photo-1616001089004-04948fc0e6c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"  alt="default image"></a>
+                        {% endif %}
+
+                        <!-- view board -->
+                        <a href="{% url 'board_page' board.id %}" class="btn btn-info d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="view board">View</a></div>
+                        
+                        <div class="card-body pt-3 p-4">
+                        <h6 class="card-title fs-4">{{board.title}}</h6>
+                        <div class="d-flex align-items-start justify-content-between overflow-hidden" style="height: 40px;">
+                            <p class="mb-0">{{board.description}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    
+    <!-- Edit profile -->
+    <div class="modal fade" id="EditProfile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method=POST enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- inputs -->
+                <label class="form-label">Name</label>
+                <input type="text" name="name" class="form-control mb-2" placeholder="Your Name" value="{{profile.name}}">
+                <label class="form-label">Profile picture</label>
+                <input type="file" name="profile_picture" class="form-control mb-2" accept="image/png, image/jpeg" value="{{profile.profile_picture}}"/>
+
+                <!-- submit -->
+                <div class="row text-center d-flex justify-content-center">
+                    <div class="col-auto">
+                    <input class="btn btn-secondary" type="submit" name="edit_profile" value="Update">
+                    <button type="button" class="btn btn-outline-link" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- End edit profile -->
+
+{% endblock %}

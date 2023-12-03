@@ -18,118 +18,161 @@
             <h2 class="fw-bold fs-11 text-info">{{board.title}} </h2>
         </div>
         <div class="row">
-            <p class="text-muted">{{board.description}} <a type="button" data-bs-toggle="modal" data-bs-target="#EditBoardModal{{ board.id }}" class="card-title"><i class="ti ti-edit fs-6 me-2"></i></a> </p>
+            <p class="text-muted">{{board.description}}</p>
         </div>
         <div class="row">
-            <p class="text-muted">{{board.author}} &#x2022; {{board.created_date}} </p>
+            <p class="text-muted">{% if profile.name %}{{profile.name}}{% else %}Unknown Author{% endif %} &#x2022; {{board.created_date|date:"d.m.Y"}} </p>
         </div>
+
+        <p>{% if board.public %} <span class="alert alert-success p-1 px-2 m-0">Public</span> {% else %} <span class="alert alert-info p-1 px-2 m-0">Private</span> {% endif %}</p>
+        <!-- Set public -->
+        <form method=POST>
+            {% csrf_token %}
+            {% if board.public %}
+                <input type="submit" class="btn btn-dark" value="Make private" name="make_board_private">
+            {% else %}
+                <input type="submit" class="btn btn-dark" value="Make public" name="make_board_public">
+            {% endif %}
+        </form>
         
     </div>
 </div>
+<div class="row mb-4 ms-1">
+    <a type="button" data-bs-toggle="modal" data-bs-target="#AddBookmarkModal" class="btn btn-success col-lg-2 col-md-2">+ Bookmark</a>  
+    <form method=POST>
+        {% csrf_token %}
+        <div class="modal fade" id="AddBookmarkModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add new bookmark.</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <!-- inputs -->
+                <label class="form-label">Title</label>
+                <input type="text" name="new_bookmark_title" class="form-control mb-2" placeholder="Bookmark title">
+                <label class="form-label">URL</label>
+                <input type="text" name="new_bookmark_address" class="form-control mb-2" placeholder="URL link *" required>      
+                <label class="form-label">Notes</label>
+                <textarea name="new_bookmark_notes" rows="4" cols="28" class="form-control mb-2" placeholder="Notes"></textarea>
+
+                <div class="row text-center d-flex justify-content-center">
+                <div class="col-auto">
+                    <input class="btn btn-success text-center" type="submit" name="submit_new_bookmark" value="Submit">
+                    <button type="button" class="btn btn-outline-link" data-bs-dismiss="modal">Cancel</button>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </form>
+</div>
 <div class="row">
-    <div class="col-lg-12 d-flex align-items-stretch">
-        <div class="card w-100">
-            <div class="card-body p-4">
-                <h5 class="card-title fw-semibold mb-4">Bookmarks</h5>
-                <div class="table-responsive">
-                    <table class="table text-nowrap mb-0 align-middle">
-                        <thead class="text-dark fs-4">
-                        <tr>
-                            <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Id</h6>
-                            </th>
-                            <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Assigned</h6>
-                            </th>
-                            <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Name</h6>
-                            </th>
-                            <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Priority</h6>
-                            </th>
-                            <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Budget</h6>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td class="border-bottom-0"><h6 class="fw-semibold mb-0">1</h6></td>
-                            <td class="border-bottom-0">
-                                <h6 class="fw-semibold mb-1">Sunil Joshi</h6>
-                                <span class="fw-normal">Web Designer</span>                          
-                            </td>
-                            <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal">Elite Admin</p>
-                            </td>
-                            <td class="border-bottom-0">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-primary rounded-3 fw-semibold">Low</span>
-                            </div>
-                            </td>
-                            <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0 fs-4">$3.9</h6>
-                            </td>
-                        </tr> 
-                        <tr>
-                            <td class="border-bottom-0"><h6 class="fw-semibold mb-0">2</h6></td>
-                            <td class="border-bottom-0">
-                                <h6 class="fw-semibold mb-1">Andrew McDownland</h6>
-                                <span class="fw-normal">Project Manager</span>                          
-                            </td>
-                            <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal">Real Homes WP Theme</p>
-                            </td>
-                            <td class="border-bottom-0">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-secondary rounded-3 fw-semibold">Medium</span>
-                            </div>
-                            </td>
-                            <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0 fs-4">$24.5k</h6>
-                            </td>
-                        </tr> 
-                        <tr>
-                            <td class="border-bottom-0"><h6 class="fw-semibold mb-0">3</h6></td>
-                            <td class="border-bottom-0">
-                                <h6 class="fw-semibold mb-1">Christopher Jamil</h6>
-                                <span class="fw-normal">Project Manager</span>                          
-                            </td>
-                            <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal">MedicalPro WP Theme</p>
-                            </td>
-                            <td class="border-bottom-0">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-danger rounded-3 fw-semibold">High</span>
-                            </div>
-                            </td>
-                            <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0 fs-4">$12.8k</h6>
-                            </td>
-                        </tr>      
-                        <tr>
-                            <td class="border-bottom-0"><h6 class="fw-semibold mb-0">4</h6></td>
-                            <td class="border-bottom-0">
-                                <h6 class="fw-semibold mb-1">Nirav Joshi</h6>
-                                <span class="fw-normal">Frontend Engineer</span>                          
-                            </td>
-                            <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal">Hosting Press HTML</p>
-                            </td>
-                            <td class="border-bottom-0">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-success rounded-3 fw-semibold">Critical</span>
-                            </div>
-                            </td>
-                            <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0 fs-4">$2.4k</h6>
-                            </td>
-                        </tr>                       
-                        </tbody>
-                    </table>
+    
+    <form method=POST>
+        {% csrf_token %}
+        <button class="btn btn-outline-light fs-4 card-title" type="submit" name="delete_selected_bookmarks"><i class="ti ti-trash"></i> Delete selected</button>
+        <div class="col-lg-12 d-flex align-items-stretch">
+            <div class="card w-100">
+                <div class="card-body p-4">
+                    <!-- <h5 class="card-title fw-semibold mb-4">Bookmarks</h5> -->
+                    <div class="table-responsive">
+                        <table class="table text-nowrap mb-0 align-middle">
+                            <thead class="text-dark fs-4">
+                            <tr>
+                                <th class="border-bottom-0">
+                                    <h6 class="fw-semibold mb-0">Check</h6>
+                                </th>
+                                <th class="border-bottom-0">
+                                    <h6 class="fw-semibold mb-0">Favicon</h6>
+                                </th>
+                                <th class="border-bottom-0">
+                                    <h6 class="fw-semibold mb-0">Title</h6>
+                                </th>
+                                <th class="border-bottom-0">
+                                    <h6 class="fw-semibold mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Shortened address">Address</h6>
+                                </th>
+                                <th class="border-bottom-0">
+                                    <h6 class="fw-semibold mb-0">Note</h6>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for bookmark, url in bookmarks %}
+                                <tr class="border-bottom">
+
+                                        <td class="border-bottom-0">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="exampleCheck1" value="{{bookmark.id}}" name="bookmarks_checked_to_delete">
+                                            </div>
+                                        </td>
+                                    
+                                    <!-- Make address colours changeable -->
+                                    <!-- ---------------------------- -->
+                                    <td class="border-bottom-0">
+                                        <h6 class="fw-semibold mb-0 text-start">
+                                            <a href="{{bookmark.address}}">
+                                                <img class="img-thumbnail me-3" height="100%" width="30px" src="/get_favicon?url={{bookmark.address}}" onerror=" this.style.display='none' " alt=" ">
+                                            </a>
+                                        </h6>
+                                    </td>
+                                    <td class="border-bottom-0">
+                                        <div class="row">
+                                            <div class="col-auto d-flex align-items-center"><a href="{{bookmark.address}}">   <h6 class="fw-semibold mb-1">{{bookmark.title}}</h6></a></div>
+                                            <div class="col-auto d-flex align-items-center"><a type="button" data-bs-toggle="modal" data-bs-target="#EditBookmarkModal{{ bookmark.id }}" class="card-title"><i class="ti ti-edit fs-6 me-2"></i></a></div>
+
+                                        </div>
+                                    </td>
+                                    <td class="border-bottom-0">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <a href="{{bookmark.address}}" target="_blank"><span class="badge bg-info rounded-3 fw-semibold">{{url}}</span></a>
+                                        </div>
+                                    </td>
+                                    <td class="border-bottom-0">
+                                        <p class="mb-0 fw-normal">{{bookmark.note}}</p>
+                                    </td>
+                                    <form method=POST>
+                                    {% csrf_token %}
+                                        <div class="modal fade" id="EditBookmarkModal{{ bookmark.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Edit bookmark.</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    
+                                                    <!-- inputs -->
+                                                    <label class="form-label">Title</label>
+                                                    <input type="text" name="new_bookmark_title" class="form-control mb-2" placeholder="Bookmark title" value="{{bookmark.title}}">
+                                                    <label class="form-label">URL</label>
+                                                    <input type="text" name="new_bookmark_address" class="form-control mb-2" placeholder="URL link *" required value="{{bookmark.address}}">      
+                                                    <label class="form-label">Notes</label>
+                                                    <textarea name="new_bookmark_notes" rows="4" cols="28" class="form-control mb-2" placeholder="Notes">{{bookmark.note}}</textarea>
+                                                    <input type="hidden" value="{{bookmark.id}}" name="bookmark_id">
+                                
+                                                    <div class="row text-center d-flex justify-content-center">
+                                                    <div class="col-auto">
+                                                        <input class="btn btn-success text-center" type="submit" name="edit_selected_bookmark" value="Submit">
+                                                        <button type="button" class="btn btn-outline-link" data-bs-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 {% endblock %}

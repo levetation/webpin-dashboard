@@ -30,6 +30,7 @@ urlpatterns = [
     path('cards', views.cards, name='cards'),
     path('forms', views.forms, name='forms'),
     path('typography', views.typography, name='typography'),
+    path('icons', views.icons, name='icons'),
 
     # auth
     path('register_user', user_views.register_user, name='register_user'),

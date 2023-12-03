@@ -35,7 +35,7 @@ def login_user(request):
 		else:
 			# Return an 'invalid login' error message.
 			messages.success(request, ("error for login in"))
-			return redirect('login')
+			return redirect('login_user')
 	else:
 		return render(request, 'users/login_user.html', {})
 	

@@ -61,8 +61,8 @@
           Sort by
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li><input class="dropdown-item" type="submit" value="Newest"  name="sort"></li>
-          <li><input class="dropdown-item" type="submit" value="Oldest" name="sort"></li>
+          <li><input class="dropdown-item" type="submit" value="Newest"  name="sortNewest"></li>
+          <li><input class="dropdown-item" type="submit" value="Oldest" name="sortOldest"></li>
         </ul>
       </div>
     </form>
@@ -75,9 +75,9 @@
   <div class="col-12">
     
     <!-- board card -->
-    <div class="row">
+      <div class="row">
         {% for board in boards %}
-        <div class="col-sm-6 col-xl-3 ">
+        <div class="col-sm-6 col-lg-5">
             <div class="card overflow-hidden rounded-2 border">
               <div class="position-relative">
                 <!-- Future update: pick image from unsplash -->
@@ -90,14 +90,17 @@
                 <!-- view board -->
                 <a href="{% url 'board_page' board.id %}" class="btn btn-info d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="view board">View</a></div>
                 
+                <!-- Board dashboard -->
                 <div class="card-body pt-3 p-4">
+                  
                   <h6 class="card-title fs-4">{{board.title}}</h6>
                   <div class="d-flex align-items-start justify-content-between overflow-hidden" style="height: 40px;">
                     <p class="mb-0">{{board.description}}</p>
                   </div>
+                  <p class="text-start">{% if board.public %} <span class="alert alert-success p-1 px-2 m-0">Public</span> {% else %} <span class="alert alert-info p-1 px-2 m-0">Private</span> {% endif %}</p>
 
                   <!-- Edit button -->
-                  <a type="button" data-bs-toggle="modal" data-bs-target="#EditBoardModal{{ board.id }}" class="card-title"><i class="ti ti-edit fs-7 me-2"></i></a>
+                    <a type="button" data-bs-toggle="modal" data-bs-target="#EditBoardModal{{ board.id }}" class="card-title"><i class="ti ti-edit fs-7 me-2"></i></a>
                   <!-- Edit boards -->
                   <div class="modal fade" id="EditBoardModal{{ board.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -130,10 +133,10 @@
                         </div>
                       </div>
                     </div>
-                  </div> <!-- end edit bookmark -->
+                  </div> <!-- end edit board -->
 
                   <!-- delete board -->
-                  <a type="button" data-bs-toggle="modal" data-bs-target="#DeleteBoardModal{{ board.id }}" class="card-title"><i class="ti ti-trash fs-7"></i></a>
+                    <a type="button" data-bs-toggle="modal" data-bs-target="#DeleteBoardModal{{ board.id }}" class="card-title"><i class="ti ti-trash fs-7"></i></a>
                   <form method=POST>
                     {% csrf_token %}
                       <div class="modal fade" id="DeleteBoardModal{{ board.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -151,12 +154,11 @@
                         </div>
                       </div>
                   </form> 
-                </div> <!-- end delete -->
-
-            </div>
+                </div> <!-- end card body -->
+            </div> <!-- end of card -->
           </div>
         {% endfor %}
-    </div>
+      </div>
 
   </div>
 

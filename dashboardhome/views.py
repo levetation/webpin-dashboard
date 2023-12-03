@@ -29,3 +29,6 @@ def forms(request):
 def typography(request):
     return render(request, 'dashboardhome/ui-typography.html', context={})
 
+def icons(request):
+    return render(request, 'dashboardhome/icon-tabler.html', context={})
+

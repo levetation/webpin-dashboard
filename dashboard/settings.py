@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'bookmarks',
     'users',
     'boards',
+    'UserProfile',
 ]
 
 MIDDLEWARE = [
